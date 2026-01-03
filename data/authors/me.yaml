@@ -59,8 +59,8 @@ education:
 #    end: 2015-05-31
   - degree: BS Computer Science + Math
     institution: UT Austin
-    start: August 2025
-    end: May 2029
+    start: 2025-08-01
+    end: 2029-05-31
 
 experience:
 #  - role: Senior AI Research Scientist
