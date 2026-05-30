@@ -1,0 +1,162 @@
+---
+import { site, nav } from '../site';
+const path = Astro.url.pathname;
+const isActive = (href: string) =>
+  href === '/' ? path === '/' : path.startsWith(href);
+---
+
+<header class="nav">
+  <div class="container nav__inner">
+    <a href="/" class="nav__brand" aria-label={`${site.name} — home`}>
+      <span class="nav__mark mono">{site.initials}</span>
+      <span class="nav__name">{site.name}</span>
+    </a>
+
+    <nav class="nav__links" aria-label="Primary">
+      {
+        nav.map((item) => (
+          <a
+            href={item.href}
+            class:list={['nav__link', { 'nav__link--active': isActive(item.href) }]}
+            aria-current={isActive(item.href) ? 'page' : undefined}
+          >
+            {item.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <button class="nav__toggle" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span>
+    </button>
+  </div>
+
+  <nav class="nav__mobile" aria-label="Mobile">
+    {
+      nav.map((item) => (
+        <a
+          href={item.href}
+          class:list={['nav__mobile-link', { 'nav__link--active': isActive(item.href) }]}
+        >
+          {item.label}
+        </a>
+      ))
+    }
+  </nav>
+</header>
+
+<style>
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(251, 251, 250, 0.72);
+    backdrop-filter: saturate(180%) blur(14px);
+    -webkit-backdrop-filter: saturate(180%) blur(14px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 4rem;
+    gap: 1.5rem;
+  }
+  .nav__brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-weight: 500;
+  }
+  .nav__mark {
+    display: inline-grid;
+    place-items: center;
+    width: 1.85rem;
+    height: 1.85rem;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    color: #fff;
+    background: var(--text-strong);
+    border-radius: var(--radius-sm);
+  }
+  .nav__name {
+    font-size: 0.95rem;
+    letter-spacing: -0.01em;
+  }
+  .nav__links {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+  .nav__link {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    padding: 0.4rem 0.7rem;
+    border-radius: var(--radius-sm);
+    transition: color 160ms var(--ease-out), background-color 160ms var(--ease-out);
+  }
+  .nav__link:hover {
+    color: var(--text-strong);
+    background: var(--surface-alt);
+  }
+  .nav__link--active {
+    color: var(--text-strong);
+  }
+  .nav__toggle {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    padding: 0.5rem;
+  }
+  .nav__toggle span {
+    display: block;
+    width: 20px;
+    height: 1.5px;
+    background: var(--text-strong);
+    transition: transform 200ms var(--ease-out), opacity 200ms var(--ease-out);
+  }
+  .nav__mobile {
+    display: none;
+    flex-direction: column;
+    padding: 0.5rem 1.5rem 1rem;
+    border-top: 1px solid var(--border);
+  }
+  .nav__mobile-link {
+    padding: 0.7rem 0;
+    font-size: 0.98rem;
+    color: var(--text-secondary);
+    border-bottom: 1px solid var(--border-soft);
+  }
+  .nav__mobile-link:last-child {
+    border-bottom: 0;
+  }
+
+  @media (max-width: 720px) {
+    .nav__links {
+      display: none;
+    }
+    .nav__toggle {
+      display: flex;
+    }
+    .nav[data-open='true'] .nav__mobile {
+      display: flex;
+    }
+    .nav[data-open='true'] .nav__toggle span:first-child {
+      transform: translateY(3.25px) rotate(45deg);
+    }
+    .nav[data-open='true'] .nav__toggle span:last-child {
+      transform: translateY(-3.25px) rotate(-45deg);
+    }
+  }
+</style>
+
+<script>
+  const header = document.querySelector('.nav');
+  const toggle = header?.querySelector('.nav__toggle');
+  toggle?.addEventListener('click', () => {
+    const open = header?.getAttribute('data-open') === 'true';
+    header?.setAttribute('data-open', String(!open));
+    toggle.setAttribute('aria-expanded', String(!open));
+  });
+</script>

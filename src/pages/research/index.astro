@@ -1,0 +1,181 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import Icon from '../../components/Icon.astro';
+import Tag from '../../components/Tag.astro';
+
+const threads = [
+  {
+    icon: 'sigma',
+    title: 'Domino Tilings of an m x n chessboard',
+    tags: ['Combinatorics', 'Graph Theory', 'Linear Algebra'],
+    body: 'By representing a Chessboard as a bipartite graph, I utilize Kasteleyn\'s theorem (with some modifications to apply to our current case) to formally derive the closed-form expression for the number of possible tilings using 2 x 1 dominoes.',
+    pdf: '/slides/domino-tilings.pdf',
+  },
+  {
+    icon: 'dice',
+    title: 'An O(n) Construction of Superpermutations',
+    tags: ['Combinatorics', 'Algorithms'],
+    body: 'By defining beads and rings and drawing functions between them, I generate superpermutations in place with much improved space efficiency. This presentation is an adaptation of my superpermutations preprint for the 20th Annual Texas Undergraduate Math Conference.',
+    pdf: '/slides/superpermutations-presentation.pdf',
+  },
+];
+---
+
+<BaseLayout
+  title="Presentations"
+  description="Research statement and current threads — dynamic spectral algorithms, optimization, robust learning, and formal mathematics."
+>
+  <PageHeader
+    eyebrow="Presentations"
+    title="My thoughts, presented live."
+    lead="A collection of all my past presentations and talks given at various conferences and symposia."
+  />
+
+  <hr class="divider" />
+
+  <section class="section container">
+    <div class="threads">
+      {
+        threads.map((t, i) => (
+          <article class="thread" data-reveal style={`--index: ${i}`}>
+            <div class="thread__head">
+              <span class="thread__icon">
+                <Icon name={t.icon} size={22} />
+              </span>
+              <div class="thread__tags">
+                {t.tags.map((tag) => (
+                  <Tag label={tag} />
+                ))}
+              </div>
+            </div>
+            <h2 class="thread__title">{t.title}</h2>
+            <p class="muted text-pretty thread__body">{t.body}</p>
+            {t.pdf && (
+              <div class="thread__links">
+                <a class="reslink" href={t.pdf} target="_blank" rel="noopener">
+                  <Icon name="file" size={15} /> PDF
+                </a>
+              </div>
+            )}
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <section class="section-tight container">
+    <div class="cta" data-reveal>
+      <p class="muted text-pretty cta__text">
+        Published work and preprints live on the research page.
+      </p>
+      <div class="cta__actions">
+        <a class="btn btn--primary" href="/publications/">
+          <Icon name="book" size={17} /> Research
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .statement__lead {
+    font-size: clamp(1.4rem, 3vw, 1.9rem);
+    line-height: 1.35;
+    color: var(--text-strong);
+    letter-spacing: -0.02em;
+    margin-bottom: 1.4rem;
+  }
+  .statement p + p {
+    margin-top: 1.2rem;
+  }
+  .statement .muted {
+    font-size: 1.05rem;
+    line-height: 1.7;
+  }
+
+  .threads {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+  .thread__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.1rem;
+  }
+  .thread__icon {
+    display: grid;
+    place-items: center;
+    width: 2.8rem;
+    height: 2.8rem;
+    border-radius: var(--radius-sm);
+    background: var(--bg-bone);
+    border: 1px solid var(--border-soft);
+    color: var(--text-strong);
+  }
+  .thread__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    justify-content: flex-end;
+  }
+  .thread__title {
+    font-size: 1.5rem;
+  }
+  .thread__body {
+    font-size: 1rem;
+    margin-top: 0.7rem;
+  }
+  .thread__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1.1rem;
+  }
+  .reslink {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    padding: 0.4rem 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    transition: color 160ms var(--ease-out), border-color 160ms var(--ease-out),
+      background-color 160ms var(--ease-out);
+  }
+  .reslink:hover {
+    color: var(--text-strong);
+    border-color: #cfcfcf;
+    background: var(--surface-alt);
+  }
+
+  .cta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+  }
+  .cta__text {
+    max-width: 44ch;
+    font-size: 1rem;
+  }
+  .cta__actions {
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  @media (max-width: 760px) {
+    .threads {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+    }
+  }
+</style>

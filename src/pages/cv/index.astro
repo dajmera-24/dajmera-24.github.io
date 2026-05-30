@@ -1,0 +1,299 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import Icon from '../../components/Icon.astro';
+import { site } from '../../site';
+
+// Replace the placeholder PDF in /public with your real CV (keep the filename).
+const cvPdf = '/Dhruv-Ajmera-CV.pdf';
+
+const education = [
+  {
+    period: '2025 — 2029',
+    title: 'B.S. Computer Science & B.S. Mathematics',
+    org: 'The University of Texas at Austin',
+    location: 'Austin, TX',
+    points: [
+      'GPA: 4.0',
+      'Coursework: graduate real analysis, statistical theory, linear algebra, differential equations',
+    ],
+  },
+];
+
+const experience = [
+  {
+    period: 'Summer 2026',
+    title: 'Machine Learning R&D Intern',
+    org: 'Bespoke Technologies',
+    location: 'Remote (Austin, TX)',
+    points: [
+      'Conducting literature reviews and prototyping/benchmarking ML models against various signals datasets',
+      'Co-authoring white papers documenting experimental methodology, model performance, and results',
+    ],
+  },
+];
+// Add back whenever needed; uncomment from timelines as well
+/*
+const teaching = [
+  {
+    period: '2023 — 2024',
+    title: 'Teaching Assistant',
+    org: 'Automata Theory & Discrete Mathematics, UT Austin',
+    location: 'Austin, TX',
+    points: [
+      'Led weekly discussion sections and built automata-lab as a visual teaching aid.',
+    ],
+  },
+];
+*/
+
+const awards = [
+  { year: '2025', text: 'Dean\'s List, University Honors (Spring)' },
+  { year: '2025', text: 'Dean\’s List, University Honors (Fall)' },
+  { year: '2024', text: 'National Merit Scholar' },
+];
+
+const skills = [
+  { group: 'Languages', items: ['Java', 'Python', 'C++', 'SQL', 'R', 'Bash'] },
+  { group: 'Scientific', items: ['NumPy', 'PyTorch', 'Scikit-learn'] },
+  { group: 'Tools', items: ['Git', 'Linux', 'LaTeX'] },
+];
+
+const timelines = [
+  { key: 'Education', icon: 'cap', items: education },
+  { key: 'Experience', icon: 'atom', items: experience },
+  //{ key: 'Teaching', icon: 'book', items: teaching },
+];
+---
+
+<BaseLayout title="CV" description="Curriculum vitae of Dhruv Ajmera — education, research experience, teaching, and awards.">
+  <PageHeader
+    eyebrow="Curriculum Vitae"
+    title="Education & experience"
+    lead="A condensed CV. The full PDF has complete coursework, references, and an extended publication list."
+  />
+
+  <section class="section-tight container cv">
+    <div class="cv__actions" data-reveal>
+      <a class="btn btn--primary" href={cvPdf} target="_blank" rel="noopener">
+        <Icon name="file" size={17} /> Download PDF
+      </a>
+      <a class="btn btn--ghost" href={`mailto:${site.email}`}>
+        <Icon name="mail" size={17} /> {site.email}
+      </a>
+    </div>
+
+    {
+      timelines.map((section) => (
+        <div class="cv__block" data-reveal>
+          <div class="cv__rail">
+            <h2 class="cv__heading">
+              <Icon name={section.icon} size={18} />
+              {section.key}
+            </h2>
+          </div>
+          <ol class="cv__list">
+            {section.items.map((item) => (
+              <li class="cv__item">
+                <span class="cv__period mono">{item.period}</span>
+                <div class="cv__content">
+                  <h3 class="cv__title">{item.title}</h3>
+                  <p class="cv__org serif">
+                    {item.org} <span class="cv__loc muted">· {item.location}</span>
+                  </p>
+                  <ul class="cv__points">
+                    {item.points.map((pt) => (
+                      <li>{pt}</li>
+                    ))}
+                  </ul>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
+      ))
+    }
+
+    <!-- Awards -->
+    <div class="cv__block" data-reveal>
+      <div class="cv__rail">
+        <h2 class="cv__heading">
+          <Icon name="star" size={18} />
+          Awards & honors
+        </h2>
+      </div>
+      <ul class="awards">
+        {
+          awards.map((a) => (
+            <li class="award">
+              <span class="award__year mono">{a.year}</span>
+              <span class="award__text">{a.text}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <!-- Skills -->
+    <div class="cv__block cv__block--last" data-reveal>
+      <div class="cv__rail">
+        <h2 class="cv__heading">
+          <Icon name="code" size={18} />
+          Skills
+        </h2>
+      </div>
+      <div class="skills">
+        {
+          skills.map((s) => (
+            <div class="skill">
+              <p class="eyebrow skill__group">{s.group}</p>
+              <ul class="skill__items">
+                {s.items.map((it) => (
+                  <li class="skill__chip mono">{it}</li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .cv__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+  .cv__block {
+    display: grid;
+    grid-template-columns: 14rem 1fr;
+    gap: 1.5rem;
+    padding-block: clamp(2rem, 4vw, 3rem);
+    border-top: 1px solid var(--border);
+  }
+  .cv__block--last {
+    border-bottom: 1px solid var(--border);
+  }
+  .cv__heading {
+    position: sticky;
+    top: 5.5rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    font-size: 1.1rem;
+    color: var(--text-strong);
+  }
+  .cv__heading :global(svg) {
+    color: var(--text-secondary);
+  }
+  .cv__list {
+    display: grid;
+    gap: 2.25rem;
+  }
+  .cv__item {
+    display: grid;
+    grid-template-columns: 8rem 1fr;
+    gap: 1.25rem;
+  }
+  .cv__period {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    padding-top: 0.25rem;
+  }
+  .cv__title {
+    font-size: 1.2rem;
+  }
+  .cv__org {
+    font-size: 1.02rem;
+    font-style: italic;
+    margin-top: 0.2rem;
+  }
+  .cv__loc {
+    font-style: normal;
+    font-size: 0.9rem;
+  }
+  .cv__points {
+    margin-top: 0.7rem;
+    display: grid;
+    gap: 0.4rem;
+  }
+  .cv__points li {
+    position: relative;
+    padding-left: 1.1rem;
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    line-height: 1.55;
+  }
+  .cv__points li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.65em;
+    width: 5px;
+    height: 1px;
+    background: var(--text-muted);
+  }
+
+  /* Awards */
+  .awards {
+    display: grid;
+    gap: 0;
+  }
+  .award {
+    display: grid;
+    grid-template-columns: 5rem 1fr;
+    gap: 1.25rem;
+    padding-block: 0.9rem;
+    border-bottom: 1px solid var(--border-soft);
+    align-items: baseline;
+  }
+  .award:last-child {
+    border-bottom: 0;
+  }
+  .award__year {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+  .award__text {
+    font-size: 0.98rem;
+  }
+
+  /* Skills */
+  .skills {
+    display: grid;
+    gap: 1.6rem;
+  }
+  .skill__group {
+    margin-bottom: 0.7rem;
+  }
+  .skill__items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+  }
+  .skill__chip {
+    font-size: 0.78rem;
+    padding: 0.35em 0.7em;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+    color: var(--text-secondary);
+  }
+
+  @media (max-width: 720px) {
+    .cv__block {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+    .cv__heading {
+      position: static;
+    }
+    .cv__item {
+      grid-template-columns: 1fr;
+      gap: 0.4rem;
+    }
+  }
+</style>

@@ -1,0 +1,124 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Icon from '../../components/Icon.astro';
+import Tag from '../../components/Tag.astro';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map((entry) => ({
+    params: { id: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const d = entry.data;
+---
+
+<BaseLayout title={d.title} description={d.summary}>
+  <article class="section-tight container detail">
+    <a href="/projects/" class="link-arrow detail__back">
+      <Icon name="arrow-right" size={15} class="detail__back-icon" /> All projects
+    </a>
+
+    <header class="detail__header" data-reveal>
+      <p class="eyebrow">Project · {d.year}</p>
+      <h1 class="detail__title text-balance">{d.title}</h1>
+      <p class="detail__summary muted text-pretty">{d.summary}</p>
+
+      <div class="detail__tags">
+        {d.tags.map((t) => <Tag label={t} />)}
+      </div>
+
+      <div class="detail__actions">
+        {
+          d.repo && (
+            <a class="btn btn--primary" href={d.repo} target="_blank" rel="noopener">
+              <Icon name="github" size={17} /> Source
+            </a>
+          )
+        }
+        {
+          d.demo && (
+            <a class="btn btn--ghost" href={d.demo} target="_blank" rel="noopener">
+              <Icon name="arrow-up-right" size={17} /> Live demo
+            </a>
+          )
+        }
+        {
+          d.paper && (
+            <a class="btn btn--ghost" href={d.paper} target="_blank" rel="noopener">
+              <Icon name="file" size={17} /> Paper
+            </a>
+          )
+        }
+      </div>
+
+      {
+        d.stack.length > 0 && (
+          <dl class="detail__meta">
+            <dt class="eyebrow">Built with</dt>
+            <dd class="mono">{d.stack.join(' · ')}</dd>
+          </dl>
+        )
+      }
+    </header>
+
+    <hr class="divider detail__rule" />
+
+    <div class="prose prose-width" data-reveal style="--index: 1">
+      <Content />
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .detail {
+    max-width: 52rem;
+  }
+  .detail__back {
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+  }
+  .detail__back :global(.detail__back-icon) {
+    transform: rotate(180deg);
+  }
+  .detail__back:hover :global(svg) {
+    transform: rotate(180deg) translateX(2px);
+  }
+  .detail__title {
+    font-size: clamp(2.2rem, 5vw, 3.2rem);
+    margin-top: 0.7rem;
+  }
+  .detail__summary {
+    font-size: 1.15rem;
+    margin-top: 1.1rem;
+    max-width: 54ch;
+  }
+  .detail__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 1.4rem;
+  }
+  .detail__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.8rem;
+  }
+  .detail__meta {
+    margin-top: 1.8rem;
+  }
+  .detail__meta dd {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-top: 0.35rem;
+  }
+  .detail__rule {
+    margin-block: clamp(2rem, 4vw, 3rem);
+  }
+</style>

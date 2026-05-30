@@ -1,0 +1,106 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import Icon from '../../components/Icon.astro';
+import Tag from '../../components/Tag.astro';
+
+const posts = (await getCollection('writing'))
+  .filter((p) => !p.data.draft)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const fmt = (d: Date) =>
+  d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+---
+
+<BaseLayout
+  title="Writing"
+  description="Essays and notes on spectral methods, combinatorics, optimization, and the mathematics of algorithms."
+>
+  <PageHeader
+    eyebrow="Writing"
+    title="Notes & essays"
+    lead="Mostly intuition-first explanations of ideas I had to work hard to understand — written so the picture comes before the machinery."
+  />
+
+  <section class="section-tight container">
+    <ul class="posts">
+      {
+        posts.map((p, i) => (
+          <li data-reveal style={`--index: ${i}`}>
+            <a href={`/writing/${p.id}/`} class="post">
+              <time class="mono post__date" datetime={p.data.date.toISOString()}>
+                {fmt(p.data.date)}
+              </time>
+              <div class="post__body">
+                <h2 class="post__title">{p.data.title}</h2>
+                <p class="muted text-pretty post__desc">{p.data.description}</p>
+                <div class="post__tags">
+                  {p.data.tags.map((t) => (
+                    <Tag label={t} />
+                  ))}
+                </div>
+              </div>
+              <Icon name="arrow-up-right" size={18} class="post__arrow" />
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+</BaseLayout>
+
+<style>
+  .posts {
+    border-top: 1px solid var(--border);
+  }
+  .post {
+    display: grid;
+    grid-template-columns: 10rem 1fr auto;
+    gap: 1.5rem;
+    align-items: start;
+    padding-block: 2rem;
+    border-bottom: 1px solid var(--border);
+    transition: background-color 180ms var(--ease-out);
+  }
+  .post:hover {
+    background: var(--surface-alt);
+  }
+  .post__date {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    padding-top: 0.4rem;
+  }
+  .post__title {
+    font-size: 1.5rem;
+    line-height: 1.25;
+  }
+  .post__desc {
+    font-size: 0.98rem;
+    margin-top: 0.5rem;
+    max-width: 56ch;
+  }
+  .post__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.9rem;
+  }
+  .post__arrow {
+    color: var(--text-muted);
+    align-self: center;
+  }
+  .post:hover .post__arrow {
+    color: var(--text-strong);
+  }
+
+  @media (max-width: 640px) {
+    .post {
+      grid-template-columns: 1fr;
+      gap: 0.6rem;
+    }
+    .post__arrow {
+      display: none;
+    }
+  }
+</style>

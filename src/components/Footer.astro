@@ -1,0 +1,112 @@
+---
+import { site, nav, socials } from '../site';
+import Icon from './Icon.astro';
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="container footer__inner">
+    <div class="footer__brand">
+      <p class="footer__name serif">{site.name}</p>
+      <p class="muted footer__meta">
+        {site.role} · {site.affiliation}
+      </p>
+      <div class="footer__socials">
+        {
+          socials.map((s) => (
+            <a
+              href={s.href}
+              class="footer__social"
+              aria-label={s.label}
+              rel="me noopener"
+              target={s.href.startsWith('mailto:') ? undefined : '_blank'}
+            >
+              <Icon name={s.icon} size={18} />
+            </a>
+          ))
+        }
+      </div>
+    </div>
+
+    <nav class="footer__nav" aria-label="Footer">
+      {nav.map((item) => <a href={item.href} class="footer__link">{item.label}</a>)}
+    </nav>
+  </div>
+
+  <div class="container footer__base">
+    <span class="mono footer__copy">© {year} {site.name}</span>
+    <span class="mono footer__built">Built with Astro · set in Newsreader &amp; Geist</span>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    border-top: 1px solid var(--border);
+    background: var(--bg-bone);
+    padding-block: clamp(2.5rem, 5vw, 4rem) 1.5rem;
+  }
+  .footer__inner {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 2.5rem;
+  }
+  .footer__name {
+    font-size: 1.4rem;
+  }
+  .footer__meta {
+    font-size: 0.86rem;
+    margin-top: 0.2rem;
+  }
+  .footer__socials {
+    display: flex;
+    gap: 0.4rem;
+    margin-top: 1.1rem;
+  }
+  .footer__social {
+    display: grid;
+    place-items: center;
+    width: 2.2rem;
+    height: 2.2rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--text-secondary);
+    background: var(--surface);
+    transition: color 180ms var(--ease-out), border-color 180ms var(--ease-out),
+      transform 180ms var(--ease-out);
+  }
+  .footer__social:hover {
+    color: var(--text-strong);
+    border-color: #cfcfcf;
+    transform: translateY(-2px);
+  }
+  .footer__nav {
+    display: grid;
+    grid-auto-rows: min-content;
+    gap: 0.6rem;
+    align-content: start;
+  }
+  .footer__link {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    transition: color 160ms var(--ease-out);
+  }
+  .footer__link:hover {
+    color: var(--text-strong);
+  }
+  .footer__base {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-top: clamp(2.5rem, 5vw, 4rem);
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-soft);
+  }
+  .footer__copy,
+  .footer__built {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    letter-spacing: 0.02em;
+  }
+</style>
