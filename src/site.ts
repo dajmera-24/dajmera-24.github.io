@@ -14,7 +14,7 @@ export const site = {
   tagline:
     'Undergraduate researcher working in the intersection of low-level implementation and high-level mathematics.',
   description:
-    'Personal site of Dhruv Ajmera: CS & Mathematics at UT Austin. Research, publications, projects, and writing.',
+    'Personal site of Dhruv Ajmera — Computer Science & Mathematics at UT Austin. Research, presentations, and curriculum vitae.',
 };
 
 export const nav = [
